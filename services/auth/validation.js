@@ -21,7 +21,7 @@ const loginValidation =(data) => {
         email: Joi.string().min(6).required().email({
             tlds: {allow: true}
         }),
-        password: Joi.string().min().required(),
+        password: Joi.string().min(8).required().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[a-zA-Z\\d\\W_]{8,}$'))
     });
     return schema.validate(data);
 }
