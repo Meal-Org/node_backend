@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const register = require('../services/auth/registration');
-const login = require('../services/auth/login');
-const logout = require('../services/auth/logout');
+const register = require('./auth/registration');
+const login = require('./auth/login');
+const logout = require('./auth/logout');
 const verifyToken = require('../middleware/verifyToken');
 
 console.log(register, login, logout, verifyToken);

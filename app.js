@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Import your route handlers
-const authRoutes = require('./routes/routes');
+const authRoutes = require('./services/routes');
 
 // Import error handling middleware
 const { errorHandler } = require('./middleware/errorHandler');

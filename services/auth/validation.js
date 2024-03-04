@@ -10,7 +10,8 @@ const registerValidation = (data) => {
     email: Joi.string().min(6).required().email({
         tlds: {allow: true}
     }),
-    password: Joi.string().min(6).required().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$'))
+    password: Joi.string().min(8).required().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[a-zA-Z\\d\\W_]{8,}$'))
+
     });
     return schema.validate(data);
 };
