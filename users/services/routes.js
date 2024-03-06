@@ -3,7 +3,7 @@ const router = express.Router();
 const register = require('./auth/registration');
 const login = require('./auth/login');
 const logout = require('./auth/logout');
-const verifyToken = require('../middleware/verifyToken');
+const verifyToken = require('../../middleware/verifyToken');
 
 console.log(register, login, logout, verifyToken);
 
