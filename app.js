@@ -15,10 +15,20 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const allowedOrigins = ['http://localhost:4200', 'https://mealpal.songa.app'];
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        }else {
+            callback(new Error ('Not allowed by CORS'))
+        }
+    }
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);

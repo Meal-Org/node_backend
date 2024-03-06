@@ -5,7 +5,7 @@ const { registerValidation } = require('./validation');
 const prisma = new PrismaClient();
 
 const register = async (req, res) => {
-
+ 
     try {
         const {error} = registerValidation(req.body);
         if (error) {
