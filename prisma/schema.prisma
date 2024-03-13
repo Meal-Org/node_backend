@@ -22,7 +22,50 @@ model User {
   lastName  String   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  recipes   Recipe[]
 
   @@map("users")
+}
+
+
+model Recipe {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String?
+  servings      Int
+  cookingTime   Int             
+  instructions  String          
+  published     Boolean         @default(false)
+  author        User            @relation(fields: [authorId], references: [id])
+  authorId      Int
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  recipeIngredients RecipeIngredient[]
+
+  @@map("recipes")
+}
+
+model Ingredient {
+  id             Int                @id @default(autoincrement())
+  name           String             @unique
+  recipeIngredients RecipeIngredient[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@map("ingredients")
+}
+
+model RecipeIngredient {
+  recipe         Recipe     @relation(fields: [recipeId], references: [id])
+  ingredient     Ingredient @relation(fields: [ingredientId], references: [id])
+  recipeId       Int
+  ingredientId   Int
+  quantity       Float              
+  measurementUnit String             
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@id([recipeId, ingredientId])
+  @@map("recipe_ingredients")
 }
 
