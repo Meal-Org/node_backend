@@ -1,9 +1,8 @@
 const express = require('express');
+const aiController = require('../controllers/aiController'); // Adjust the path as needed
 const router = express.Router();
-const aiController = require('../controllers/aiController');
 
-// Endpoint for generating text based on a prompt
+// Route for generating text based on a prompt
 router.post('/generate-text', aiController.getAIResponse);
-
 
 module.exports = router;

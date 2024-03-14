@@ -32,13 +32,26 @@ class UnauthorizedError extends Error {
     }
 }
 
+// Adding a new class for OpenAI errors
+class OpenAIError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "OpenAIError";
+        this.statusCode = 500;
+    }
+}
+
 // Error Handling Middleware
 const errorHandler = (err, req, res, next) => {
     // Log the error for the server's records
     console.error(err);
 
     // Handle specific error types with custom responses
-    if (err instanceof ValidationError || err instanceof DatabaseError || err instanceof NotFoundError || err instanceof UnauthorizedError) {
+    if (err instanceof ValidationError || 
+        err instanceof DatabaseError || 
+        err instanceof NotFoundError || 
+        err instanceof UnauthorizedError ||
+        err instanceof OpenAIError) { // Include OpenAIError in the condition
         return res.status(err.statusCode).json({ error: err.message });
     }
 
@@ -53,5 +66,6 @@ module.exports = {
     ValidationError,
     DatabaseError,
     NotFoundError,
-    UnauthorizedError
+    UnauthorizedError,
+    OpenAIError // Export the new error class
 };

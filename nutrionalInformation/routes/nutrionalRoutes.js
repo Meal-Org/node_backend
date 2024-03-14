@@ -1,5 +1,5 @@
 const express = require('express');
-const nutritionController = require('../controllers/nutritionController');
+const nutritionController = require('../controllers/nutritionalController');
 const router = express.Router();
 
 router.get('/:ingredientName', nutritionController.getNutritionalInfo);

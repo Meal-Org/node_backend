@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const recipeController = require('./recipeController');
-const recipeValidation = require('./recipeValidation');
+const register = require('./auth/registration');
+const login = require('./auth/login');
+const logout = require('./auth/logout');
+const verifyToken = require('../../middleware/verifyToken');
 
+console.log(register, login, logout, verifyToken);
 
-// Routes for recipe management
-router.post('/recipes', recipeValidation.validateRecipeCreation, recipeController.createRecipe);
-router.get('/recipes', recipeController.getAllRecipes);
-router.get('/recipes/:id', recipeController.getRecipe);
-router.put('/recipes/:id', recipeValidation.validateRecipeUpdate, recipeController.updateRecipe);
-router.delete('/recipes/:id', recipeController.deleteRecipe);
-
+router.post('/register', register);
+router.post('/login', login);
+router.post('/logout', logout);
 
 router.get('/protected', verifyToken, (req, res) => {
-  res.send('Protected route accessed');
+    res.send('Protected route accessed');
 });
 
 module.exports = router;

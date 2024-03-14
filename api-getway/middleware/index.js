@@ -3,7 +3,7 @@ const express = require('express');
 const rateLimiter = require('../middleware/rateLimiter');
 const recipeRoutes = require('../../recipe-management/routes/recipeRoutes'); // Adjust path as necessary
 const nutritionRoutes = require('../../nutritional-information/routes/nutritionRoutes'); // Adjust path as necessary
-const aiRoutes = require('../../ai-interaction/routes/aiRoutes'); // Adjust path as necessary
+const aiRoutes = require('../../ai/routes/aiRoutes'); // Adjust path as necessary
 
 const router = express.Router();
 

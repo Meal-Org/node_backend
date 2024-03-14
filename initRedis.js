@@ -14,4 +14,4 @@ const getAsync = promisify(client.get).bind(client);
 const setAsync = promisify(client.set).bind(client);
 const delAsync = promisify(client.del).bind(client);
 
-module.export = {getAsync, setAsync, delAsync}
+module.exports = {getAsync, setAsync, delAsync}

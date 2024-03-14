@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./users/services/routes'); // Adjust path as needed
 const recipeRoutes = require('./recipe_management/routes/recipeRoutes'); // Adjust path as needed
 const nutritionRoutes = require('./nutrionalInformation/routes/nutrionalRoutes'); // Adjust path as needed
-const aiRoutes = require('./ai-interaction/routes/aiRoutes'); // Adjust path as needed
+const aiRoutes = require('./ai/routes/aiRoutes'); // Adjust path as needed
 
 // Import error handling middleware
 const { errorHandler } = require('./middleware/errorHandler');
