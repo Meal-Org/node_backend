@@ -1,6 +1,9 @@
-const openai = require('./openaiClient');
+const { OpenAI } = require('openai');
 const logger = require('../../shared/logger'); // Adjust path as necessary
 const { ValidationError, OpenAIError } = require('../../middleware/errorHandler'); // Adjust paths and error names as necessary
+require('dotenv').config();
+
+const openai = new OpenAI();
 
 exports.generateText = async (prompt, maxTokens = 150) => {
   if (!prompt) {
@@ -10,23 +13,18 @@ exports.generateText = async (prompt, maxTokens = 150) => {
   try {
     logger.info(`Generating text for prompt: ${prompt}`);
     // Using the updated method call for chat completions
-    const response = await openai.createChatCompletion({
+    const response = await openai.chat.completions.create({
+      messages: [{ role: "system", content: "You are a helpful assistant." }],
       model: "gpt-3.5-turbo",
-      messages: [
-        { role: 'user', content: prompt }
-      ],
-      max_tokens: maxTokens,
-      temperature: 0.7,
-      // Include any other necessary parameters
     });
 
     // Assuming the structure of the response is correct as per the OpenAI API format
+    // Ensure the correct path to access the generated text based on the actual response structure
     const responseText = response.data.choices[0].message.content.trim();
     logger.info(`Generated text with GPT-3.5 Turbo: ${responseText}`);
     return responseText;
   } catch (error) {
     logger.error('Error with the OpenAI GPT-3.5 Turbo API', { error: error.message });
-    // Using a more specific error if available or a generic one if not
     throw new OpenAIError('Failed to generate text from OpenAI GPT-3.5 Turbo API');
   }
 };
