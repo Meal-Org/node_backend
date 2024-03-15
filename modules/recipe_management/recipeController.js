@@ -1,34 +1,52 @@
-const recipeService = require('./recipeService');
-const {NorFoundError} = require('../../middleware/errorHandler')
+const recipeService = require('../recipe_management/recipeService');
+const {NotFoundError} = require('../../middleware/errorHandler')
+
+// Assuming NotFoundError is correctly imported and used in the global error handler
 exports.createRecipe = async (req, res, next) => {
-  recipeService.createRecipe(req.body)
-    .then(recipe => res.status(201).json(recipe))
-    .catch(next);
+  try {
+    const recipe = await recipeService.createRecipe(req.body);
+    res.status(201).json(recipe);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.getAllRecipes = (req, res, next) => {
-  recipeService.getRecipes()
-    .then(recipes => res.json(recipes))
-    .catch(next);
+exports.getAllRecipes = async (req, res, next) => {
+  try {
+    const recipes = await recipeService.getRecipes();
+    res.json(recipes);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.getRecipe = (req, res, next) => {
+exports.getRecipe = async (req, res, next) => {
   const { id } = req.params;
-  recipeService.getRecipeById(parseInt(id))
-    .then(recipe => recipe ? res.json(recipe) : res.status(404).json({ message: 'Recipe not found' }))
-    .catch(next);
+  try {
+    const recipe = await recipeService.getRecipeById(parseInt(id));
+    res.json(recipe);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.updateRecipe = (req, res, next) => {
+
+exports.updateRecipe = async (req, res, next) => {
   const { id } = req.params;
-  recipeService.updateRecipe(parseInt(id), req.body)
-    .then(recipe => res.json(recipe))
-    .catch(next);
+  try {
+    const recipe = await recipeService.updateRecipe(parseInt(id), req.body);
+    res.json(recipe);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.deleteRecipe = (req, res, next) => {
+exports.deleteRecipe = async (req, res, next) => {
   const { id } = req.params;
-  recipeService.deleteRecipe(parseInt(id))
-    .then(() => res.status(204).send())
-    .catch(next);
+  try {
+    await recipeService.deleteRecipe(parseInt(id));
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
 };

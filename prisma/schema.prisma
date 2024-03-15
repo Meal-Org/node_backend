@@ -14,16 +14,17 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  username     String        @unique
-  email        String        @unique
-  password     String
-  firstName    String
-  lastName     String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  recipes      Recipe[]
-  interactions Interaction[]
+  id              Int               @id @default(autoincrement())
+  username        String            @unique
+  email           String            @unique
+  password        String
+  firstName       String
+  lastName        String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  recipes         Recipe[]
+  interactions    Interaction[]
+  NutritionalInfo NutritionalInfo[]
 
   @@map("users")
 }
@@ -82,8 +83,9 @@ model RecipeIngredient {
 }
 
 model NutritionalInfo {
-  id           Int        @id @default(autoincrement())
-  ingredientId Int        @unique
+  id           Int    @id @default(autoincrement())
+  ingredientId Int    @unique
+  userId       Int?
   calories     Float?
   fatTotal     Float?
   saturatedFat Float?
@@ -93,8 +95,9 @@ model NutritionalInfo {
   fiber        Float?
   sugars       Float?
   protein      Float?
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  user       User?      @relation(fields: [userId], references: [id])
 
   @@map("nutritional_info")
 }
-

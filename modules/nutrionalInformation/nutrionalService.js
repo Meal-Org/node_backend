@@ -1,52 +1,47 @@
-const {PrismaClient} = require('@prisma/client')
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-const prisma = new PrismaClient()
-
-exports.getNutrionalInfoByIngredientName = async (ingredientName) => {
+exports.getNutritionalInfoByIngredientName = async (ingredientName) => {
     try {
         const ingredient = await prisma.ingredient.findUnique({
-            where: {
-                name: ingredientName,
-            },
-            include: {
-                nutrionalInfo: true,
-            },
+            where: { name: ingredientName },
+            include: { nutritionalInfo: true },
         });
         if (!ingredient) {
-            throw new Error('Ingredient with name ${ingredientName} not found')
+            throw new Error(`Ingredient with name ${ingredientName} not found`);
         }
-        return ingredientName.nutrionalInfo;
-    }catch(error) {
-        console.error(`Failed to retrieve nutrional info : ${error.message}`)
+        return ingredient.nutritionalInfo;
+    } catch (error) {
+        console.error(`Failed to retrieve nutritional info for ${ingredientName}: ${error.message}`);
         throw error;
     }
 };
 
-exports.upsertnutrionalInfo = async (ingredientName, nutritionalData) => {
+exports.upsertNutritionalInfo = async (ingredientName, nutritionalData, userId) => {
     try {
+        // Ensure the ingredient exists or create it
         const ingredient = await prisma.ingredient.upsert({
-            where: {
-                name: ingredientName,
-            },
+            where: { name: ingredientName },
             update: {},
-            create: {
+            create: { 
                 name: ingredientName,
+                // Assuming a direct relation for demonstration
+                userId: userId
             },
         });
-        const nutrionalInfo = await prisma.nutrionalInfor.upsert({
-            where: {
-                ingredientId: ingredient.id,
 
-            },
+        // Update or create nutritional information
+        const nutritionalInfo = await prisma.nutritionalInfo.upsert({
+            where: { ingredientId: ingredient.id },
             update: nutritionalData,
             create: {
                 ...nutritionalData,
-                ingredientId: ingredient.id
+                ingredientId: ingredient.id,
             },
         });
-        return nutrionalInfo;
-    } catch(error) {
-        console.error('Failed to upsert nutrional information: ${error.message}')
+        return nutritionalInfo;
+    } catch (error) {
+        console.error(`Failed to upsert nutritional information for ${ingredientName}: ${error.message}`);
         throw error;
     }
-}
+};
