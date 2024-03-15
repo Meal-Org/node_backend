@@ -1,5 +1,5 @@
 const express = require('express');
-const aiController = require('../controllers/aiController'); // Adjust the path as needed
+const aiController = require('./aiController'); // Adjust the path as needed
 const router = express.Router();
 
 // Route for generating text based on a prompt

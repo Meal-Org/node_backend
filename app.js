@@ -4,10 +4,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Import route handlers for all services
-const authRoutes = require('./users/services/routes'); // Adjust path as needed
-const recipeRoutes = require('./recipe_management/routes/recipeRoutes'); // Adjust path as needed
-const nutritionRoutes = require('./nutrionalInformation/routes/nutrionalRoutes'); // Adjust path as needed
-const aiRoutes = require('./ai/routes/aiRoutes'); // Adjust path as needed
+const authRoutes = require('./modules/users/routes'); // Adjust path as needed
+const recipeRoutes = require('./modules/recipe_management/recipeRoutes'); // Adjust path as needed
+const nutritionRoutes = require('./modules/nutrionalInformation/nutrionalRoutes'); // Adjust path as needed
+const aiRoutes = require('./modules/ai/aiRoutes'); // Adjust path as needed
 
 // Import error handling middleware
 const { errorHandler } = require('./middleware/errorHandler');

@@ -1,4 +1,4 @@
-const recipeService = require('../services/recipeService');
+const recipeService = require('./recipeService');
 const {NorFoundError} = require('../../middleware/errorHandler')
 exports.createRecipe = async (req, res, next) => {
   recipeService.createRecipe(req.body)

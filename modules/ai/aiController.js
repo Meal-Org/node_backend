@@ -1,6 +1,6 @@
 // aiController.js
 
-const aiService = require('../services/aiService'); // Adjust path as necessary
+const aiService = require('./aiService'); // Adjust path as necessary
 
 exports.getAIResponse = async (req, res) => {
   try {
@@ -11,6 +11,6 @@ exports.getAIResponse = async (req, res) => {
     const responseText = await aiService.generateText(prompt);
     res.send({ response: responseText });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: error });
   }
 };

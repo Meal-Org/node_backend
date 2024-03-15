@@ -1,4 +1,4 @@
-const nutritionService = require('../services/nutrionalService');
+const nutritionService = require('./nutrionalService');
 
 /**
  * GET /nutrition/:ingredientName

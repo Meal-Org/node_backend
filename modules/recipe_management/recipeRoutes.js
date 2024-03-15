@@ -1,6 +1,6 @@
 const express = require('express');
-const recipeController = require('../controllers/recipeController');
-const recipeValidation = require('../middleware/recipeValidation');
+const recipeController = require('./recipeController');
+const recipeValidation = require('./recipeValidation');
 const router = express.Router();
 
 router.post('/recipes', recipeValidation.validateRecipeCreation, recipeController.createRecipe);
