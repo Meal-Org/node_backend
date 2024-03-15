@@ -14,17 +14,29 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  firstName String
-  lastName  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  recipes   Recipe[]
+  id           Int           @id @default(autoincrement())
+  username     String        @unique
+  email        String        @unique
+  password     String
+  firstName    String
+  lastName     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  recipes      Recipe[]
+  interactions Interaction[]
 
   @@map("users")
+}
+
+model Interaction {
+  id         Int      @id @default(autoincrement())
+  userQuery  String
+  aiResponse String
+  createdAt  DateTime @default(now())
+  userId     Int? // Optional, if not every interaction is associated with a user
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "userIdIndex")
 }
 
 model Recipe {
@@ -85,3 +97,4 @@ model NutritionalInfo {
 
   @@map("nutritional_info")
 }
+
