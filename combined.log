@@ -1,0 +1,29 @@
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"openai.createChatCompletion is not a function","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"openai.createChatCompletion is not a function","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"openai.createChatCompletion is not a function","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"openai.createChatCompletion is not a function","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"openai.createChatCompletion is not a function","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"error":"Cannot read properties of undefined (reading 'choices')","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"level":"info","message":"Generated text with GPT-3.5 Turbo: [object Object]","service":"ai-interaction-service"}
+{"error":"responseText is not defined","level":"error","message":"Error with the OpenAI GPT-3.5 Turbo API","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"level":"info","message":"Generated text with GPT-3.5 Turbo: [object Object]","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"level":"info","message":"Generated text with GPT-3.5 Turbo: [object Object]","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"level":"info","message":"Generated text with GPT-3.5 Turbo: [object Object]","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"level":"info","message":"Generated text with GPT-3.5 Turbo: [object Object]","service":"ai-interaction-service"}
+{"level":"info","message":"Generating text for prompt: Tell me a joke about cats.","service":"ai-interaction-service"}
+{"level":"info","message":"Generated text with GPT-3.5 Turbo: [object Object]","service":"ai-interaction-service"}
