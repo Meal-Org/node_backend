@@ -1,11 +1,10 @@
-// AIService.js
 const { OpenAI } = require('openai');
 const { PrismaClient } = require('@prisma/client');
 const logger = require('../../shared/logger');
 const { ValidationError, OpenAIError } = require('../../middleware/errorHandler');
 const { analyzePrompt } = require('../nlp/nlpService');
 const { getNutritionalInfoByIngredientName } = require('../nutrionalInformation/nutrionalService');
-const { getRecipeById } = require('../recipe_management/recipeService');
+const { createRecipe } = require('../recipe_management/recipeService');
 require('dotenv').config();
 
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
@@ -15,14 +14,34 @@ const systemMessageTemplates = {
     general: "You are a helpful assistant specializing in food, knowledgeable about recipes, ingredients, and nutritional facts.",
     nutrition: "You are an expert in nutritional information, capable of providing detailed data on a wide range of ingredients.",
     recipe: "You can offer detailed recipes based on specified ingredients, cuisine types, and dietary preferences.",
-    // Add more templates for other intents as needed
 };
+
+function extractRecipeTitle(prompt) {
+    // Enhanced regex to handle different phrasings more robustly
+    const match = prompt.match(/for\s+(.+)$/i);
+    if (match && match[1]) {
+        console.log(`Extracted recipe title: ${match[1].trim()}`); // Added logging
+        return match[1].trim();
+    } else {
+        console.log("No recipe title could be extracted."); // Added logging
+        return null;
+    }
+}
+
+function getRecipeTitleFromPrompt(prompt) {
+    let recipeTitle = extractRecipeTitle(prompt);
+    if (!recipeTitle) {
+        recipeTitle = "User's Special Recipe"; // Simplified logic
+        console.log(`Using default recipe title: ${recipeTitle}`); // Added logging
+    }
+    return recipeTitle;
+}
 
 exports.handleUserPrompt = async (prompt, userId, maxTokens = 150) => {
     if (!prompt) throw new ValidationError("Prompt cannot be empty");
 
     const { intent, entities } = analyzePrompt(prompt);
-    let systemMessage = systemMessageTemplates[intent] || systemMessageTemplates.general; // Default to general if intent not recognized
+    let systemMessage = systemMessageTemplates[intent] || systemMessageTemplates.general;
     let responseContent;
 
     try {
@@ -30,15 +49,72 @@ exports.handleUserPrompt = async (prompt, userId, maxTokens = 150) => {
             case "nutrition":
                 // Handling nutritional information
                 responseContent = entities.length > 0 ?
-                  await getNutritionalInfoByIngredientName(entities[0]) :
-                  "I'm not sure which ingredient you're asking about. Could you specify?";
+                    await getNutritionalInfoByIngredientName(entities[0]) :
+                    "I'm not sure which ingredient you're asking about. Could you specify?";
                 break;
             case "recipe":
-                // Handling recipe information
-                responseContent = entities.length > 0 ?
-                  await getRecipeById(entities[0]) :
-                  "I need to know the ingredient you're interested in for a recipe.";
+                
+                const recipeTitle = getRecipeTitleFromPrompt(prompt);
+
+                
+                if (!recipeTitle || recipeTitle.length === 0) {
+                    console.error("Recipe title is empty or null after extraction and default assignment.");
+                    responseContent = "Failed to extract a valid recipe title from your prompt. Please try again.";
+                    break; // Exit the case if the title is invalid
+                }
+
+                let detailedRecipeContent; 
+                try {
+                    const detailedRecipeResponse = await openai.chat.completions.create({
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            { role: "system", content: systemMessage },
+                            { role: "user", content: prompt },
+                        ],
+                        max_tokens: maxTokens,
+                    });
+
+
+                    if (detailedRecipeResponse && detailedRecipeResponse.data && detailedRecipeResponse.data.choices) {
+                        detailedRecipeContent = detailedRecipeResponse.data.choices[0].text.trim();
+                    } else {
+                        throw new Error("Invalid response structure from OpenAI API.");
+                    }
+                } catch (error) {
+                    console.error("Failed to generate recipe content:", error);
+                    responseContent = "There was an error generating the recipe content. Please try again.";
+                    break; 
+                }
+
+                if (detailedRecipeContent) {
+
+                    try {
+                        const recipeData = {
+                            title: recipeTitle,
+                            description: "Generated by AI based on user's request.",
+                            servings: 2, // This is an example value
+                            cookingTime: 30, 
+                            instructions: detailedRecipeContent,
+                            published: false,
+                            authorId: userId || 1, 
+                        };
+
+                        const createdRecipe = await createRecipe(recipeData);
+                        // Construct your success responseContent here using createdRecipe details
+                        responseContent = `Recipe titled "${recipeTitle}" created successfully. Here are the details:\n` +
+                            `Description: ${createdRecipe.description}\n` +
+                            `Servings: ${createdRecipe.servings}\n` +
+                            `Cooking Time: ${createdRecipe.cookingTime} minutes\n` +
+                            `Instructions: ${createdRecipe.instructions}\n` +
+                            `Published: ${createdRecipe.published ? 'Yes' : 'No'}`;
+                    } catch (error) {
+                        console.error("Error creating recipe:", error);
+                        responseContent = "There was an error creating the recipe. Please try again.";
+                    }
+                }
                 break;
+
+
             case "general":
             default:
                 // Fallback to generating text with OpenAI, using a dynamic system message
@@ -54,18 +130,18 @@ exports.handleUserPrompt = async (prompt, userId, maxTokens = 150) => {
                 break;
         }
 
-        // In the part of your AIService where you create the Interaction
+        // The database interaction to log the conversation
         await prisma.interaction.create({
             data: {
                 userQuery: prompt,
                 aiResponse: responseContent,
-                userId: userId || null, // Correctly handling nullable userId
+                userId: userId || null,
             },
         });
 
         return responseContent;
     } catch (error) {
         logger.error('Error with AI Service', { error: error.message, prompt });
-        throw new OpenAIError('Failed to process the request. ' + error.message); // Including original error message for context
+        throw new OpenAIError('Failed to process the request. ' + error.message);
     }
 };

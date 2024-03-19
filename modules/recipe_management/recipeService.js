@@ -2,11 +2,31 @@ const { PrismaClient } = require('@prisma/client');
 const { NotFoundError } = require('../../middleware/errorHandler');
 const prisma = new PrismaClient();
 
+
+/**
+ * Create a recipe with the given data.
+ * @param {Object} recipeData - The data for the recipe to be created.
+ * @returns {Promise<Object>} The created recipe.
+ */
 const createRecipe = async (recipeData) => {
-    return await prisma.recipe.create({
-        data: recipeData,
-    });
+    // Validate or transform recipeData as needed
+    if (!recipeData.title) {
+        throw new Error("Recipe title is required.");
+    }
+
+    try {
+        const createdRecipe = await prisma.recipe.create({
+            data: recipeData,
+        });
+        return createdRecipe;
+    } catch (error) {
+        throw new Error(`Failed to create recipe: ${error.message}`);
+    }
 };
+
+
+
+
 
 const getRecipes = async () => {
     return await prisma.recipe.findMany();
