@@ -74,12 +74,13 @@ exports.handleUserPrompt = async (prompt, userId, maxTokens = 150) => {
                         max_tokens: maxTokens,
                     });
 
-
-                    if (detailedRecipeResponse && detailedRecipeResponse.data && detailedRecipeResponse.data.choices) {
-                        detailedRecipeContent = detailedRecipeResponse.data.choices[0].text.trim();
+                    if (detailedRecipeResponse && detailedRecipeResponse.choices && detailedRecipeResponse.choices.length > 0) {
+                        const choice = detailedRecipeResponse.choices[0];
+                        detailedRecipeContent = choice.message.content.trim();
                     } else {
                         throw new Error("Invalid response structure from OpenAI API.");
                     }
+
                 } catch (error) {
                     console.error("Failed to generate recipe content:", error);
                     responseContent = "There was an error generating the recipe content. Please try again.";

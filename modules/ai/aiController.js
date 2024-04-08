@@ -14,7 +14,7 @@ exports.getAIResponse = async (req, res) => {
         }
 
         // Generate the response text using the AI service
-        const responseText = await aiService.handleUserPrompt(prompt, userId, 150); // Assuming maxTokens is 150
+        const responseText = await aiService.handleUserPrompt(prompt, userId, 1500); // Assuming maxTokens is 150
 
         // Log the received response
         logger.info(`Response received for prompt: ${prompt} | Response: ${responseText}`);
